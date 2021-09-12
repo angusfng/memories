@@ -18,7 +18,15 @@ const Register = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("form submit");
+    const payload = {
+      firstName,
+      lastName,
+      email,
+      userName,
+      password,
+      confirmPassword,
+    };
+    console.log(payload);
   };
 
   return (

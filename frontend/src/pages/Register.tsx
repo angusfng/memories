@@ -12,7 +12,7 @@ const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -22,7 +22,7 @@ const Register = () => {
       firstName,
       lastName,
       email,
-      userName,
+      username,
       password,
       confirmPassword,
     };
@@ -62,7 +62,7 @@ const Register = () => {
             <Input
               type="text"
               placeholder="Username"
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </FormControl>
           <FormControl id="register-password">

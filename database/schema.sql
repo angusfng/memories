@@ -1,10 +1,9 @@
 create table Users (
-  id serial,
-  username varchar(30) unique not null,
-  email text not null,
-  first_name text not null,
-  last_name text not null,
-  hash text,
-  salt text,
+  id serial not null,
+  username varchar(30) unique,
+  email text,
+  first_name text,
+  last_name text,
+  password text,
   primary key (id)
 )

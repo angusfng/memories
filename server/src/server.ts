@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcrypt";
-import { execute } from "../db";
+import { query } from "../db";
+import { MyDatabaseError } from "./error";
 
 dotenv.config();
 const app = express();
@@ -17,24 +18,42 @@ app.get("/", (req, res) => {
   res.send("Memories server");
 });
 
-execute();
-
 app.post("/register", async (req, res) => {
   if (req.body.password !== req.body.confirmPassword) {
-    res.status(400).json({ message: "Passwords do not match" });
+    return res.status(400).json({ message: "Passwords do not match" });
   }
-  await bcrypt.hash(req.body.password, 10, (err, hash) => {
-    console.log(hash);
-  });
-  res.status(200).json({ message: "Successfully registered" });
+  try {
+    const hash = await bcrypt.hash(req.body.password, 10);
+    const text =
+      "insert into users (username, email, first_name, last_name, password) values ($1, $2, $3, $4, $5)";
+    await query(text, [
+      req.body.username,
+      req.body.email,
+      req.body.firstName,
+      req.body.lastName,
+      hash,
+    ]);
+    return res.status(200).json({ message: "Registered" });
+  } catch (err) {
+    if (err instanceof MyDatabaseError) {
+      return res.status(400).json({ error: err.message });
+    } else {
+      return res.status(400).json({ error: "Something went wrong" });
+    }
+  }
 });
 
 app.post("/login", async (req, res) => {
-  const hash = "test";
-  await bcrypt.compare(req.body.password, hash, (err, result) => {
-    console.log(result);
-  });
-  res.status(200).json({ token: "abc" });
+  // Get user
+  const text = "select password from users where username = $1";
+  const response = await query(text, [req.body.username]);
+  console.log(response.rows);
+  if (response.rows.length === 0) {
+    return res.status(400).json({ error: "Wrong username or password" });
+  }
+  return res.status(200).json({ message: "Logged In" });
+  // Compare passwords
+  // JWT
 });
 
 app.listen(port, () => {

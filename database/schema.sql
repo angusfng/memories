@@ -1,9 +1,10 @@
-create table Users (
-  id serial not null,
-  username varchar(30) unique,
-  email text,
-  first_name text,
-  last_name text,
-  password text,
-  primary key (id)
-)
+create table Posts (
+  id serial unique,
+  title varchar(255),
+  message text,
+  creator varchar(255),
+  tags text,
+  selected_file text,
+  like_count int default 0,
+  created_at date default now()
+);

@@ -11,6 +11,7 @@ const App = () => {
       minH="100vh"
       templateRows="3.5rem 1fr"
       templateAreas={`"navbar" "page"`}
+      bg="gray.50"
     >
       <Navbar />
       <Switch>
